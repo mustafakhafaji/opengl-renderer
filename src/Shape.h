@@ -1,11 +1,11 @@
 #pragma once
 
+#include "Vertex.h"
+
 class Shape {
 public:
 	int number_of_vertices;
 
-
-private:
-
+	Shape(Vertex vertices[]);
 
 };
