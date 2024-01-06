@@ -1,6 +1,6 @@
-#include "Shape.h"
+#include "Object.h"
 #include "Vertex.h"
 
-Shape(Vertex vertices[]) {
+Object(Vertex vertices[]) {
 
 }

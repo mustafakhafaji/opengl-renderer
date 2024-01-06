@@ -93,6 +93,7 @@
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)External\GLFW\include;$(SolutionDir)External\glew-2.1.0\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -110,6 +111,7 @@
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)External\GLFW\include;$(SolutionDir)External\glew-2.1.0\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,40 +157,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="c-utils\DataStructures\LinkedList\linked_list.c" />
-    <ClCompile Include="c-utils\DataStructures\Queue\queue.c" />
-    <ClCompile Include="c-utils\DataStructures\Stack\stack.c" />
-    <ClCompile Include="c-utils\Math\Matrix\Matrix.c" />
     <ClCompile Include="c-utils\Math\Vector2\vector2.c" />
     <ClCompile Include="c-utils\Math\Vector3\vector3.c" />
     <ClCompile Include="c-utils\Math\Vector4\vector4.c" />
-    <ClCompile Include="c-utils\Math\Vector\vector.c" />
     <ClCompile Include="src\app.cpp" />
     <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\Shape.cpp" />
-    <ClCompile Include="src\ShapeGenerator.cpp" />
-    <ClCompile Include="src\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="c-utils\DataStructures\LinkedList\linked_list.h" />
-    <ClInclude Include="c-utils\DataStructures\Queue\queue.h" />
-    <ClInclude Include="c-utils\DataStructures\Stack\stack.h" />
-    <ClInclude Include="c-utils\Math\Matrix\Matrix.h" />
     <ClInclude Include="c-utils\Math\Vector2\vector2.h" />
     <ClInclude Include="c-utils\Math\Vector3\vector3.h" />
     <ClInclude Include="c-utils\Math\Vector4\vector4.h" />
-    <ClInclude Include="c-utils\Math\Vector\vector.h" />
     <ClInclude Include="src\Shader.h" />
-    <ClInclude Include="src\Shape.h" />
-    <ClInclude Include="src\ShapeGenerator.h" />
-    <ClInclude Include="src\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include=".gitmodules" />
-    <None Include="c-utils\LICENSE" />
     <None Include="README.md" />
+    <None Include="Resources\Shaders\Fragment.shader" />
+    <None Include="Resources\Shaders\Vertex.shader" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="LICENSE.txt" />

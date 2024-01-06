@@ -21,27 +21,6 @@
     <ClCompile Include="src\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ShapeGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vertex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="c-utils\DataStructures\LinkedList\linked_list.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="c-utils\DataStructures\Stack\stack.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="c-utils\Math\Matrix\Matrix.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="c-utils\Math\Vector\vector.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Shape.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="c-utils\Math\Vector4\vector4.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,33 +30,9 @@
     <ClCompile Include="c-utils\Math\Vector2\vector2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="c-utils\DataStructures\Queue\queue.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Shape.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Vertex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ShapeGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="c-utils\DataStructures\LinkedList\linked_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="c-utils\DataStructures\Stack\stack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="c-utils\Math\Matrix\Matrix.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="c-utils\Math\Vector\vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="c-utils\Math\Vector4\vector4.h">
@@ -89,16 +44,14 @@
     <ClInclude Include="c-utils\Math\Vector2\vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="c-utils\DataStructures\Queue\queue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include=".gitmodules" />
     <None Include="README.md" />
-    <None Include="c-utils\LICENSE" />
+    <None Include="Resources\Shaders\Fragment.shader" />
+    <None Include="Resources\Shaders\Vertex.shader" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="LICENSE.txt" />

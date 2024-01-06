@@ -2,10 +2,10 @@
 
 #include "Vertex.h"
 
-class Shape {
+class Object {
 public:
 	int number_of_vertices;
 
-	Shape(Vertex vertices[]);
+	Object(Vertex vertices[]);
 
 };

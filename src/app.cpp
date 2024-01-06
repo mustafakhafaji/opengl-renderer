@@ -2,51 +2,16 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include "Shader.h"
 
 void loadShaders()
 {
-	const char* vertex_shader_source =
-		"#version 430 core\n"
-		""
-		"layout(location = 0) in vec2 position;"
-		"layout(location = 1) in vec3 color;"
-		""
-		"out vec3 daColor;"
-		""
-		"void main()"
-		"{"
-		"gl_Position = vec4(position, 0.0, 1.0);"
-		"daColor = color;"
-		"}";
-
-	const char* fragment_shader_source =
-		"#version 430 core\n"
-		""
-		"in vec3 daColor;"
-		"out vec4 fragColor;"
-		""
-		"void main()"
-		"{"
-		"fragColor = vec4(daColor, 1.0);"
-		"}";
-
-	GLuint vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertex_shader_id, 1, &vertex_shader_source, nullptr);
-	glCompileShader(vertex_shader_id);
-
-	GLuint fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragment_shader_id, 1, &fragment_shader_source, nullptr);
-	glCompileShader(fragment_shader_id);
-
 	GLuint program = glCreateProgram();
-	glAttachShader(program, vertex_shader_id);
-	glAttachShader(program, fragment_shader_id);
+	Shader vertex_shader("Vertex.shader", GL_VERTEX_SHADER, program);
+	Shader fragment_shader("Fragment.shader", GL_FRAGMENT_SHADER, program);
 
 	glLinkProgram(program);
 	glUseProgram(program);
-
-	glDeleteShader(vertex_shader_id);
-	glDeleteShader(fragment_shader_id);
 }
 
 void processInput(GLFWwindow* window) {
@@ -75,15 +40,19 @@ int main() {
 	loadShaders();
 
 	GLfloat vertex_data[] = {
-		0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		1.0f, 1.0f,
-		0.0f, 1.0f, 0.0f,
-		-1.0f, 1.0f,
 		0.0f, 0.0f, 1.0f,
-		-1.0f, -1.0f,
+		1.0f, 0.0f, 0.0f,
+
+		1.0f, 1.0f, 1.0f,
+		0.0f, 1.0f, 0.0f,
+
+		-1.0f, 1.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+
+		-1.0f, -1.0f, 3.0f,
 		0.5f, 0.0f, 0.0f,
-		1.0f, -1.0f,
+
+		1.0f, -1.0f, 2.3f,
 		0.0f, 0.5f, 0.0f,
 	};
 
@@ -93,10 +62,10 @@ int main() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, 0);
 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)(sizeof(GLfloat) * 2));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)(sizeof(GLfloat) * 3));
 
 	GLushort index_data[] = {0, 1, 2, 0, 3, 4};
 
@@ -105,10 +74,12 @@ int main() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer_object);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index_data), index_data, GL_STATIC_DRAW);
 
+	//glEnable(GL_DEPTH_TEST);
+
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 
