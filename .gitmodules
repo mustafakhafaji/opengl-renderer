@@ -1,6 +1,3 @@
 [submodule "c-utils"]
 	path = c-utils
 	url = git@github.com:mustafakhafaji/c-utils.git
-[submodule "glm"]
-	path = External/glm
-	url = https://github.com/g-truc/glm.git
