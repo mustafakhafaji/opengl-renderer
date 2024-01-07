@@ -161,13 +161,19 @@
     <ClCompile Include="c-utils\Math\Vector3\vector3.c" />
     <ClCompile Include="c-utils\Math\Vector4\vector4.c" />
     <ClCompile Include="src\app.cpp" />
+    <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\ShapeGenerator.cpp" />
+    <ClCompile Include="src\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c-utils\Math\Vector2\vector2.h" />
     <ClInclude Include="c-utils\Math\Vector3\vector3.h" />
     <ClInclude Include="c-utils\Math\Vector4\vector4.h" />
+    <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\ShapeGenerator.h" />
+    <ClInclude Include="src\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

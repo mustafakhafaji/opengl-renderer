@@ -1,8 +1,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
 #include <iostream>
-#include "Shader.h"
+
+#include "Shader.hpp"
 
 void loadShaders()
 {
@@ -74,7 +74,7 @@ int main() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer_object);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index_data), index_data, GL_STATIC_DRAW);
 
-	//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
