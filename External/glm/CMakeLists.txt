@@ -1,70 +1,73 @@
-file(GLOB ROOT_SOURCE *.cpp)
-file(GLOB ROOT_INLINE *.inl)
-file(GLOB ROOT_HEADER *.hpp)
-file(GLOB ROOT_TEXT ../*.txt)
-file(GLOB ROOT_MD ../*.md)
-file(GLOB ROOT_NAT ../util/glm.natvis)
+cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
+cmake_policy(VERSION 3.6)
 
-file(GLOB_RECURSE CORE_SOURCE ./detail/*.cpp)
-file(GLOB_RECURSE CORE_INLINE ./detail/*.inl)
-file(GLOB_RECURSE CORE_HEADER ./detail/*.hpp)
 
-file(GLOB_RECURSE EXT_SOURCE ./ext/*.cpp)
-file(GLOB_RECURSE EXT_INLINE ./ext/*.inl)
-file(GLOB_RECURSE EXT_HEADER ./ext/*.hpp)
+file(READ "glm/detail/setup.hpp" GLM_SETUP_FILE)
+string(REGEX MATCH "#define[ ]+GLM_VERSION_MAJOR[ ]+([0-9]+)" _ ${GLM_SETUP_FILE})
+set(GLM_VERSION_MAJOR "${CMAKE_MATCH_1}")
+string(REGEX MATCH "#define[ ]+GLM_VERSION_MINOR[ ]+([0-9]+)" _ ${GLM_SETUP_FILE})
+set(GLM_VERSION_MINOR "${CMAKE_MATCH_1}")
+string(REGEX MATCH "#define[ ]+GLM_VERSION_PATCH[ ]+([0-9]+)" _ ${GLM_SETUP_FILE})
+set(GLM_VERSION_PATCH "${CMAKE_MATCH_1}")
+string(REGEX MATCH "#define[ ]+GLM_VERSION_REVISION[ ]+([0-9]+)" _ ${GLM_SETUP_FILE})
+set(GLM_VERSION_REVISION "${CMAKE_MATCH_1}")
 
-file(GLOB_RECURSE GTC_SOURCE ./gtc/*.cpp)
-file(GLOB_RECURSE GTC_INLINE ./gtc/*.inl)
-file(GLOB_RECURSE GTC_HEADER ./gtc/*.hpp)
+set(GLM_VERSION ${GLM_VERSION_MAJOR}.${GLM_VERSION_MINOR}.${GLM_VERSION_PATCH}.${GLM_VERSION_REVISION})
+project(glm VERSION ${GLM_VERSION} LANGUAGES CXX)
+message(STATUS "GLM: Version " ${GLM_VERSION})
 
-file(GLOB_RECURSE GTX_SOURCE ./gtx/*.cpp)
-file(GLOB_RECURSE GTX_INLINE ./gtx/*.inl)
-file(GLOB_RECURSE GTX_HEADER ./gtx/*.hpp)
-
-file(GLOB_RECURSE SIMD_SOURCE ./simd/*.cpp)
-file(GLOB_RECURSE SIMD_INLINE ./simd/*.inl)
-file(GLOB_RECURSE SIMD_HEADER ./simd/*.h)
-
-source_group("Text Files" FILES ${ROOT_TEXT} ${ROOT_MD})
-source_group("Core Files" FILES ${CORE_SOURCE})
-source_group("Core Files" FILES ${CORE_INLINE})
-source_group("Core Files" FILES ${CORE_HEADER})
-source_group("EXT Files" FILES ${EXT_SOURCE})
-source_group("EXT Files" FILES ${EXT_INLINE})
-source_group("EXT Files" FILES ${EXT_HEADER})
-source_group("GTC Files" FILES ${GTC_SOURCE})
-source_group("GTC Files" FILES ${GTC_INLINE})
-source_group("GTC Files" FILES ${GTC_HEADER})
-source_group("GTX Files" FILES ${GTX_SOURCE})
-source_group("GTX Files" FILES ${GTX_INLINE})
-source_group("GTX Files" FILES ${GTX_HEADER})
-source_group("SIMD Files" FILES ${SIMD_SOURCE})
-source_group("SIMD Files" FILES ${SIMD_INLINE})
-source_group("SIMD Files" FILES ${SIMD_HEADER})
-
-add_library(glm INTERFACE)
-target_include_directories(glm INTERFACE ../)
-
-if(BUILD_STATIC_LIBS)
-add_library(glm_static STATIC ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
-	${ROOT_SOURCE}    ${ROOT_INLINE}    ${ROOT_HEADER}
-	${CORE_SOURCE}    ${CORE_INLINE}    ${CORE_HEADER}
-	${EXT_SOURCE}     ${EXT_INLINE}     ${EXT_HEADER}
-	${GTC_SOURCE}     ${GTC_INLINE}     ${GTC_HEADER}
-	${GTX_SOURCE}     ${GTX_INLINE}     ${GTX_HEADER}
-	${SIMD_SOURCE}    ${SIMD_INLINE}    ${SIMD_HEADER})
-	target_link_libraries(glm_static PUBLIC glm)
-	add_library(glm::glm_static ALIAS glm_static)
+set(GLM_IS_MASTER_PROJECT OFF)
+if (${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+	set(GLM_IS_MASTER_PROJECT ON)
 endif()
 
-if(BUILD_SHARED_LIBS)
-add_library(glm_shared SHARED ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
-	${ROOT_SOURCE}    ${ROOT_INLINE}    ${ROOT_HEADER}
-	${CORE_SOURCE}    ${CORE_INLINE}    ${CORE_HEADER}
-	${EXT_SOURCE}     ${EXT_INLINE}     ${EXT_HEADER}
-	${GTC_SOURCE}     ${GTC_INLINE}     ${GTC_HEADER}
-	${GTX_SOURCE}     ${GTX_INLINE}     ${GTX_HEADER}
-	${SIMD_SOURCE}    ${SIMD_INLINE}    ${SIMD_HEADER})
-	target_link_libraries(glm_shared PUBLIC glm)
-	add_library(glm::glm_shared ALIAS glm_shared)
+option(GLM_BUILD_LIBRARY "Build dynamic/static library" ON)
+option(GLM_BUILD_TESTS "Build the test programs" ${GLM_IS_MASTER_PROJECT})
+option(GLM_BUILD_INSTALL "Generate the install target" ${GLM_IS_MASTER_PROJECT})
+
+include(GNUInstallDirs)
+
+add_subdirectory(glm)
+
+if (GLM_BUILD_TESTS)
+	include(CTest)
+	add_subdirectory(test)
+endif()
+
+if (GLM_BUILD_INSTALL)
+	include(CPack)
+
+	install(TARGETS glm-header-only glm EXPORT glm)
+	install(
+		DIRECTORY glm
+		DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+		PATTERN "CMakeLists.txt" EXCLUDE
+	)
+	install(
+		EXPORT glm
+		NAMESPACE glm::
+		DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/glm"
+		FILE glmConfig.cmake
+	)
+	include(CMakePackageConfigHelpers)
+	write_basic_package_version_file(
+		"${CMAKE_CURRENT_BINARY_DIR}/glmConfigVersion.cmake"
+		COMPATIBILITY AnyNewerVersion
+	)
+	install(
+		FILES "${CMAKE_CURRENT_BINARY_DIR}/glmConfigVersion.cmake"
+		DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/glm"
+	)
+
+	configure_file(
+		"${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+		"${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+		IMMEDIATE @ONLY
+	)
+
+	add_custom_target(
+		uninstall
+		"${CMAKE_COMMAND}" -P
+		"${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+	)
 endif()
