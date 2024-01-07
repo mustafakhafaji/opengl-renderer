@@ -3,9 +3,10 @@
 #include <iostream>
 
 #include "Shader.hpp"
+#include "ShapeGenerator.hpp"
+#include "Object.hpp"
 
-void loadShaders()
-{
+void loadShaders() {
 	GLuint program = glCreateProgram();
 	Shader vertex_shader("Vertex.shader", GL_VERTEX_SHADER, program);
 	Shader fragment_shader("Fragment.shader", GL_FRAGMENT_SHADER, program);
@@ -20,15 +21,17 @@ void processInput(GLFWwindow* window) {
 	}
 }
 
-void FrameBufferSizeCallback(GLFWwindow* window, int width, int height) {
+void frameBufferSizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
 
 int main() {
 	glfwInit();
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "learning", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(800, 600, "3D Renderer", NULL, NULL);
 	glfwMakeContextCurrent(window);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 	if (glewInit() != GLEW_OK) {
 		std::cout << "glewInit() failed" << std::endl;
@@ -36,43 +39,28 @@ int main() {
 	}
 
 	glViewport(0, 0, 800, 600);
-	glfwSetFramebufferSizeCallback(window, FrameBufferSizeCallback);
+	glfwSetFramebufferSizeCallback(window, frameBufferSizeCallback);
 	loadShaders();
 
-	GLfloat vertex_data[] = {
-		0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 0.0f,
-
-		1.0f, 1.0f, 1.0f,
-		0.0f, 1.0f, 0.0f,
-
-		-1.0f, 1.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-
-		-1.0f, -1.0f, 3.0f,
-		0.5f, 0.0f, 0.0f,
-
-		1.0f, -1.0f, 2.3f,
-		0.0f, 0.5f, 0.0f,
-	};
-
+	Object cube = ShapeGenerator_GenerateCube();
+	
 	GLuint vertex_buffer_object;
 	glGenBuffers(1, &vertex_buffer_object);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_object);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, cube.GetVertexBufferSize(), cube.vertices, GL_STATIC_DRAW);
 
+	// Position attribute.
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, 0);
 
+	// Color attribute.
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)(sizeof(GLfloat) * 3));
-
-	GLushort index_data[] = {0, 1, 2, 0, 3, 4};
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)(sizeof(GLfloat) * 3));
 
 	GLuint index_buffer_object;
 	glGenBuffers(1, &index_buffer_object);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer_object);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index_data), index_data, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, cube.GetIndexBufferSize(), cube.indices, GL_STATIC_DRAW);
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -81,7 +69,7 @@ int main() {
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+		glDrawElements(GL_TRIANGLES, cube.GetIndexBufferSize(), GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

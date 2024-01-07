@@ -5,8 +5,8 @@
 
 // Parses a shader's file.
 //
-// @param shader_file_name The name of shader file inside of /Resources/Shaders/{...}
-// @return A pointer to the first character in the shader's file.
+// @param shader_file_name The name of shader file inside of /Resources/Shaders/{...}.
+// @return Shader in string format.
 std::string parseShaderFile(std::string shader_file_name);
 
 class Shader {

@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\GLFW\include;$(SolutionDir)External\glew-2.1.0\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\GLFW\include;$(SolutionDir)External\glew-2.1.0\include;$(SolutionDir)External\glm</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\GLFW\include;$(SolutionDir)External\glew-2.1.0\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\GLFW\include;$(SolutionDir)External\glew-2.1.0\include;$(SolutionDir)External\glm</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -157,9 +157,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="c-utils\Math\Vector2\vector2.c" />
-    <ClCompile Include="c-utils\Math\Vector3\vector3.c" />
-    <ClCompile Include="c-utils\Math\Vector4\vector4.c" />
     <ClCompile Include="src\app.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Shader.cpp" />
@@ -167,9 +164,6 @@
     <ClCompile Include="src\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="c-utils\Math\Vector2\vector2.h" />
-    <ClInclude Include="c-utils\Math\Vector3\vector3.h" />
-    <ClInclude Include="c-utils\Math\Vector4\vector4.h" />
     <ClInclude Include="src\Object.hpp" />
     <ClInclude Include="src\Shader.hpp" />
     <ClInclude Include="src\ShapeGenerator.hpp" />

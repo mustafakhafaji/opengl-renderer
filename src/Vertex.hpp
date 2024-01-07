@@ -1,6 +1,6 @@
 #pragma once
 
-#include "glm.hpp"
+#include "glm/glm.hpp"
 
 class Vertex {
 public:
@@ -10,7 +10,7 @@ public:
 	// @param color the vertex's color defined in RGBA format
 	// @param UV the vertex's UV coordinate
 	// @return The vertex object
-	Vertex(glm::vec3 position, glm::vec4 color, glm::vec2 UV);
+	//Vertex(glm::vec3 position, glm::vec4 color, glm::vec2 UV);
 
 	// Creates a vertex object excluding UV (textureless).
 	//
@@ -21,5 +21,4 @@ public:
 
 	glm::vec3 position;
 	glm::vec4 color;
-	glm::vec2 UV;
 };
