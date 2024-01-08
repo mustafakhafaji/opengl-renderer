@@ -1,7 +1,5 @@
 #include "Vertex.hpp"
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
-#include "glm/vec4.hpp"
+#include "glm/glm.hpp"
 
 /*Vertex::Vertex(glm::vec3 position, glm::vec4 color, glm::vec2 UV) {
 	position = position;

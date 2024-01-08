@@ -5,9 +5,11 @@
 #include "Shader.hpp"
 #include "ShapeGenerator.hpp"
 #include "Object.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/glm.hpp"
 
-void loadShaders() {
-	GLuint program = glCreateProgram();
+void loadShaders(GLuint program) {
+	
 	Shader vertex_shader("Vertex.shader", GL_VERTEX_SHADER, program);
 	Shader fragment_shader("Fragment.shader", GL_FRAGMENT_SHADER, program);
 
@@ -28,7 +30,7 @@ void frameBufferSizeCallback(GLFWwindow* window, int width, int height) {
 int main() {
 	glfwInit();
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "3D Renderer", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(800, 800, "3D Renderer", NULL, NULL);
 	glfwMakeContextCurrent(window);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -38,9 +40,11 @@ int main() {
 		return 0;
 	}
 
-	glViewport(0, 0, 800, 600);
+	GLuint program = glCreateProgram();
+
+	glViewport(0, 0, 800, 800);
 	glfwSetFramebufferSizeCallback(window, frameBufferSizeCallback);
-	loadShaders();
+	loadShaders(program);
 
 	Object cube = ShapeGenerator_GenerateCube();
 	
@@ -68,6 +72,13 @@ int main() {
 		processInput(window);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glm::mat4 projection_matrix = glm::perspective(60.0f, 800.0f / 800.0f, 0.1f, 10.0f);
+		glm::mat4 projection_translation_matrix = glm::translate(projection_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
+		glm::mat4 full_transformation_matrix = glm::rotate(projection_translation_matrix, 34.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+
+		GLint projection_matrix_uniform_location = glGetUniformLocation(program, "full_transformation_matrix");
+		glUniformMatrix4fv(projection_matrix_uniform_location, 1, GL_FALSE, &full_transformation_matrix[0][0]);
 
 		glDrawElements(GL_TRIANGLES, cube.GetIndexBufferSize(), GL_UNSIGNED_INT, 0);
 
