@@ -27,6 +27,15 @@ Shader::Shader(std::string shader_file_name, GLenum shader_type, GLuint program)
 
 	glShaderSource(this->ID, 1, &shader_code_start, nullptr);
 	glCompileShader(this->ID);
+
+	int success;
+	glGetShaderiv(this->ID, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		char error_log[512];
+		glGetShaderInfoLog(this->ID, 512, NULL, error_log);
+		std::cout << "ERROR: SHADER COMPILATIONS FAILED - " << error_log << std::endl;
+	}
+
 	glAttachShader(program, this->ID);
 }
 

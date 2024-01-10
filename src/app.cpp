@@ -14,7 +14,14 @@ void loadShaders(GLuint program) {
 	Shader fragment_shader("Fragment.shader", GL_FRAGMENT_SHADER, program);
 
 	glLinkProgram(program);
-	glUseProgram(program);
+
+	int success;
+	glGetProgramiv(program, GL_LINK_STATUS, &success);
+	if (!success) {
+		char error_log[512];
+		glGetProgramInfoLog(program, 512, NULL, error_log);
+		std::cout << "ERROR: SHADER LINKING FAILED - " << error_log << std::endl;
+	}
 }
 
 void processInput(GLFWwindow* window) {
@@ -47,6 +54,11 @@ int main() {
 	loadShaders(program);
 
 	Object cube = ShapeGenerator_GenerateCube();
+
+	GLuint vertex_array_object;
+	glGenVertexArrays(1, &vertex_array_object);
+	glBindVertexArray(vertex_array_object);
+	glBufferData(GL_ARRAY_BUFFER, cube.GetVertexBufferSize(), cube.vertices, GL_STATIC_DRAW);
 	
 	GLuint vertex_buffer_object;
 	glGenBuffers(1, &vertex_buffer_object);
@@ -56,14 +68,16 @@ int main() {
 	// Position attribute.
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, 0);
-
 	// Color attribute.
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)(sizeof(GLfloat) * 3));
 
-	GLuint index_buffer_object;
-	glGenBuffers(1, &index_buffer_object);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer_object);
+	glUseProgram(program);
+	glBindVertexArray(vertex_array_object);
+
+	GLuint element_buffer_object;
+	glGenBuffers(1, &element_buffer_object);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer_object);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, cube.GetIndexBufferSize(), cube.indices, GL_STATIC_DRAW);
 
 	glEnable(GL_DEPTH_TEST);
@@ -74,8 +88,8 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glm::mat4 projection_matrix = glm::perspective(60.0f, 800.0f / 800.0f, 0.1f, 10.0f);
-		glm::mat4 projection_translation_matrix = glm::translate(projection_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
-		glm::mat4 full_transformation_matrix = glm::rotate(projection_translation_matrix, 34.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		glm::mat4 projection_translation_matrix = glm::translate(projection_matrix, glm::vec3(0.0f, 0.0f, -2.5f));
+		glm::mat4 full_transformation_matrix = glm::rotate(projection_translation_matrix, glm::pi<float>() / 1.2f, glm::vec3(1.0f, 0.0f, 0.0f));
 
 		GLint projection_matrix_uniform_location = glGetUniformLocation(program, "full_transformation_matrix");
 		glUniformMatrix4fv(projection_matrix_uniform_location, 1, GL_FALSE, &full_transformation_matrix[0][0]);
